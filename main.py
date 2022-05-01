@@ -22,10 +22,6 @@ class Input:
             raise WrongValueException("Wrong additional param")
         if not os.path.exists(self.source_file_name):
             raise WrongValueException("Given source file does not exist")
-        if not self.save_file_name:
-            raise WrongValueException("Given save file name is empty")
-        if not self.additional_file_name:
-            raise WrongValueException("Given additional file name is empty")
 
 
 #Class that saves the output and
@@ -52,23 +48,26 @@ class Output:
 
 
 def get_input():
-    acronym = sys.argv[1]
-    additional_param = sys.argv[2]
-    source_file_name = sys.argv[3]
-    save_file_name = sys.argv[4]
-    additional_file_name = sys.argv[5]
-    return Input(
-        acronym,
-        additional_param,
-        source_file_name,
-        save_file_name,
-        additional_file_name
-    )
+    try:
+        acronym = sys.argv[1]
+        additional_param = sys.argv[2]
+        source_file_name = sys.argv[3]
+        save_file_name = sys.argv[4]
+        additional_file_name = sys.argv[5]
+        return Input(
+            acronym,
+            additional_param,
+            source_file_name,
+            save_file_name,
+            additional_file_name
+        )
+    except IndexError:
+        raise WrongValueException("Some input arguments hadn't been given")
 
 
 def main():
     input_args = get_input()
-
+    input_args.__validate__()
     #read
     with open(input_args.source_file_name, "r") as file:
         if not file.readable():
@@ -89,7 +88,7 @@ def main():
         else:
             file.write(output.get_result())
 
-    #Save additional information
+    #Save result additional information
     with open(input_args.additional_file_name, "w+") as file:
         if not output:
             file.write("-1")
