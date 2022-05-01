@@ -17,8 +17,8 @@ class Input:
     def __validate__(self):
         if self.acronym not in ("bfs", "dfs", "astr"):
             raise WrongValueException("Wrong acronym")
-        if not set(self.additional_param) == set("LPUD") and \
-                self.additional_param not in ("hamm", "manh"):
+        if (not set(self.additional_param) == set("LPUD") and self.acronym in ("bfs", "dfs")) or \
+                (self.acronym == "astr" and self.additional_param not in ("hamm", "manh")):
             raise WrongValueException("Wrong additional param")
         if not os.path.exists(self.source_file_name):
             raise WrongValueException("Given source file does not exist")
