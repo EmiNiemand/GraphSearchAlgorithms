@@ -1,5 +1,6 @@
 import os.path
 import sys
+import node
 
 
 class WrongValueException(ValueError):
@@ -14,7 +15,7 @@ class Input:
         self.save_file_name = save_file_name
         self.additional_file_name = additional_file_name
 
-    def __validate__(self):
+    def validate(self):
         if self.acronym not in ("bfs", "dfs", "astr"):
             raise WrongValueException("Wrong acronym")
         if (not set(self.additional_param) == set("LPUD") and self.acronym in ("bfs", "dfs")) or \
@@ -67,7 +68,7 @@ def get_input():
 
 def main():
     input_args = get_input()
-    input_args.__validate__()
+    input_args.validate()
     #read
     with open(input_args.source_file_name, "r") as file:
         if not file.readable():
@@ -79,6 +80,10 @@ def main():
             array.append([int(x) for x in line.split()])
     print(str(w), str(k))
     print(array)
+
+    board = node.State(array)
+    board.validate()
+    print(board.get_elements())
 
     output = None
     #Save result
