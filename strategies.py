@@ -56,7 +56,6 @@ def dfs(start_time: float, board: node.State, additional_param: []) -> []:
     current_node = node.Node(board, None, None, additional_param, 0)
     open_states = []
     closed_states = set()
-    max_depth_reached = 0
     max_depth = 22
     open_states.append(current_node)
 
@@ -64,20 +63,21 @@ def dfs(start_time: float, board: node.State, additional_param: []) -> []:
         v = open_states.pop(-1)
 
         processed_states += 1
-        max_depth_reached = v.depth
         if v not in closed_states:
             closed_states.add(v)
 
             if goal_reached(v.state):
                 return io.Output(v.get_solution(), visited_states, processed_states,
-                                 max_depth_reached, time.process_time() - start_time)
+                                 v.depth, time.process_time() - start_time)
 
-            if max_depth_reached < max_depth:
+            if v.depth < max_depth:
                 neighbours = v.get_neighbours()
-                for n in neighbours:
-                    if n not in closed_states:
-                        open_states.append(n)
-                        visited_states += 1
+                if neighbours is not None:
+                    neighbours.reverse()
+                    for n in neighbours:
+                        if n not in closed_states:
+                            open_states.append(n)
+                            visited_states += 1
     return False
 
 
