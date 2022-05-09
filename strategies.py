@@ -34,6 +34,7 @@ def bfs(start_time: float, board: node.State, additional_param: []) -> []:
 
     while open_states:
         v = open_states.pop(0)
+
         processed_states += 1
         max_depth = max(max_depth, v.depth)
         if goal_reached(v.state):
@@ -50,7 +51,34 @@ def bfs(start_time: float, board: node.State, additional_param: []) -> []:
 
 
 def dfs(start_time: float, board: node.State, additional_param: []) -> []:
-    return
+    visited_states = 1
+    processed_states = 0
+    current_node = node.Node(board, None, None, additional_param, 0)
+    open_states = []
+    closed_states = set()
+    max_depth_reached = 0
+    max_depth = 22
+    open_states.append(current_node)
+
+    while open_states:
+        v = open_states.pop(-1)
+
+        processed_states += 1
+        max_depth_reached = v.depth
+        if v not in closed_states:
+            closed_states.add(v)
+
+            if goal_reached(v.state):
+                return io.Output(v.get_solution(), visited_states, processed_states,
+                                 max_depth_reached, time.process_time() - start_time)
+
+            if max_depth_reached < max_depth:
+                neighbours = v.get_neighbours()
+                for n in neighbours:
+                    if n not in closed_states:
+                        open_states.append(n)
+                        visited_states += 1
+    return False
 
 
 def astr(start_time: float, board: node.State, additional_param: []) -> []:
