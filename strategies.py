@@ -34,7 +34,6 @@ def bfs(start_time: float, board: node.State, additional_param: []) -> []:
 
     while open_states:
         v = open_states.pop(0)
-        print(v.state.elements)
         processed_states += 1
         max_depth = max(max_depth, v.depth)
         if goal_reached(v.state):

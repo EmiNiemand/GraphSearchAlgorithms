@@ -45,10 +45,17 @@ class Node:
 
     def get_neighbours(self):
         neighbours = []
-        x = self.zero[0]
-        y = self.zero[1]
+        x, y = self.zero
         initial_sequence = self.sequence.copy()
-        self.block_moves()
+
+        if self.zero[1] == 0:
+            self.sequence.remove('U')
+        elif self.zero[1] == len(self.state) - 1:
+            self.sequence.remove('D')
+        if self.zero[0] == 0:
+            self.sequence.remove('L')
+        elif self.zero[0] == len(self.state) - 1:
+            self.sequence.remove('R')
 
         for i in range(len(self.sequence)):
             neighbours.append([row[:] for row in self.state])
@@ -77,15 +84,17 @@ class Node:
                 index += 1
         return neighbours
 
-    def block_moves(self):
-        if self.zero[1] == 0:
-            self.sequence.remove('U')
-        elif self.zero[1] == len(self.state) - 1:
-            self.sequence.remove('D')
-        if self.zero[0] == 0:
-            self.sequence.remove('L')
-        elif self.zero[0] == len(self.state) - 1:
-            self.sequence.remove('R')
+    def get_solution(self):
+        solution = []
+        if self.last_move is None:
+            return solution
+        solution.append(self.last_move)
+        parent = self.parent
+        while parent.last_move:
+            solution.append(parent.last_move)
+            parent = parent.parent
+        solution.reverse()
+        return solution
 
     def zero_position(self):
         for y in range(len(self.state)):
@@ -93,16 +102,4 @@ class Node:
                 if self.state[y][x] == 0:
                     return tuple((x, y))
         raise NoZeroFoundException("There's no zero in the board")
-
-    def get_solution(self):
-        solution = []
-        if self.last_move is None:
-            return solution
-        solution.append(self.last_move)
-        parent = self.parent
-        while parent.last_move is not None:
-            solution.append(parent.last_move)
-            parent = parent.parent
-        solution.reverse()
-        return solution
 
