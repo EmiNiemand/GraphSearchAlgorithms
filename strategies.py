@@ -72,8 +72,8 @@ def dfs(start_time: float, board: node.State, additional_param: []):
         processed_states += 1
         max_depth = max(max_depth, v.depth)
 
-        if v not in closed_states:
-            closed_states.add(v)
+        if v.state not in closed_states:
+            closed_states.add(v.state)
 
             if goal_reached(v.state):
                 return io.Output(
