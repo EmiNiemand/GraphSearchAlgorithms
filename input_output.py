@@ -45,7 +45,7 @@ class Output:
                 f"{self.visited_states}\n" \
                 f"{self.processed_states}\n" \
                 f"{self.recursion_max_depth}\n"\
-                f"{self.process_time}"
+                f"{round(self.process_time * 1000, 3)}"
 
 
 def get_input():

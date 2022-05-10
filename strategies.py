@@ -30,10 +30,9 @@ def bfs(start_time: float, board: node.State, additional_param: []):
     visited_states = 1
     processed_states = 0
     current_node = node.Node(board, None, None, additional_param)
-    open_states = []
+    open_states = [current_node]
     closed_states = set()
     max_depth = 0
-    open_states.append(current_node)
 
     while open_states:
         v = open_states.pop(0)
@@ -63,36 +62,31 @@ def dfs(start_time: float, board: node.State, additional_param: []):
     visited_states = 1
     processed_states = 0
     current_node = node.Node(board, None, None, additional_param)
-    open_states = []
+    open_states = [current_node]
     closed_states = set()
     max_depth = 0
-    open_states.append(current_node)
 
     while open_states:
-        v = open_states.pop(-1)
+        v = open_states.pop()
         processed_states += 1
         max_depth = max(max_depth, v.depth)
 
-        if v.state not in closed_states:
-            closed_states.add(v.state)
+        if v.state not in closed_states and v.depth < MAX_DEPTH:
+            closed_states.add(v)
 
-            if goal_reached(v.state):
-                return io.Output(
-                    v.get_solution(),
-                    visited_states,
-                    processed_states,
-                    max_depth,
-                    time.process_time() - start_time
-                )
+            neighbours = reversed(v.get_neighbours())
 
-            if v.depth < MAX_DEPTH:
-                neighbours = v.get_neighbours()
-                if neighbours is not None:
-                    neighbours.reverse()
-                    for neighbour in neighbours:
-                        if neighbour not in closed_states:
-                            open_states.append(neighbour)
-                            visited_states += 1
+            for neighbour in neighbours:
+                if goal_reached(neighbour.state):
+                    return io.Output(
+                        neighbour.get_solution(),
+                        visited_states,
+                        processed_states,
+                        max_depth,
+                        time.process_time() - start_time
+                    )
+                open_states.append(neighbour)
+                visited_states += 1
     return False
 
 
