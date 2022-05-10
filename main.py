@@ -2,7 +2,6 @@ import strategies
 import time
 import node
 import input_output as io
-import astr_classes as ac
 
 
 class BoardValidationException(Exception):
@@ -49,9 +48,9 @@ def main():
         output = strategies.dfs(start_time, board, list(input_args.additional_param))
     elif input_args.acronym == "astr":
         if input_args.additional_param == "hamm":
-            heuristic = ac.Hamming()
+            heuristic = strategies.Hamming()
         elif input_args.additional_param == "manh":
-            heuristic = ac.Manhattan()
+            heuristic = strategies.Manhattan()
         else:
             raise WrongHeuristic("Given heuristic is wrong")
         start_time = time.process_time()

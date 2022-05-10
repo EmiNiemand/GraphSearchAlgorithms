@@ -1,4 +1,5 @@
 from queue import PriorityQueue
+from math import floor
 
 import node
 import time
@@ -95,6 +96,28 @@ def dfs(start_time: float, board: node.State, additional_param: []):
     return False
 
 
+class Hamming:
+    def __call__(self, neighbour):
+        hamming_distance = 0
+        for y in range(len(TARGET_BOARD)):
+            for x in range(len(TARGET_BOARD[y])):
+                if neighbour.state[y][x] != TARGET_BOARD[y][x] and neighbour.state[y][x] != 0:
+                    hamming_distance += 1
+        return hamming_distance
+
+
+class Manhattan:
+    def __call__(self, neighbour):
+        manhattan_distance = 0
+        for y in range(len(TARGET_BOARD)):
+            for x in range(len(TARGET_BOARD[y])):
+                if neighbour.state[y][x] != TARGET_BOARD[y][x] and neighbour.state[y][x] != 0:
+                    x_pos = (neighbour.state[y][x] - 1) % len(TARGET_BOARD)
+                    y_pos = floor((neighbour.state[y][x] - 1) / len(TARGET_BOARD))
+                    manhattan_distance += abs(x - x_pos) + abs(y - y_pos)
+        return manhattan_distance
+
+
 class ElementDekorator:
     def __init__(self, element_id, node_object, distance):
         self.element_id = element_id
@@ -102,10 +125,10 @@ class ElementDekorator:
         self.distance = distance
 
     def __le__(self, other):
-        return self.distance <= other.distance and self.element_id <= other.node_id
+        return self.distance <= other.distance and self.element_id <= other.element_id
 
     def __lt__(self, other):
-        return self.distance < other.distance and self.element_id < other.node_id
+        return self.distance < other.distance and self.element_id < other.element_id
 
 
 def astr(start_time: float, board: node.State, heuristic):
@@ -115,10 +138,10 @@ def astr(start_time: float, board: node.State, heuristic):
     open_states = PriorityQueue()
     closed_states = set()
     max_depth = 0
-    open_states.put(ElementDekorator(processed_states, current_node, heuristic(current_node.state)))
+    open_states.put(ElementDekorator(processed_states, current_node, heuristic(current_node)))
 
     while open_states:
-        v = open_states.get().node
+        v = open_states.get().node_object
 
         if v in closed_states:
             continue
