@@ -2,8 +2,14 @@ import strategies
 import time
 import node
 import input_output as io
+import astr_classes as ac
+
 
 class BoardValidationException(Exception):
+    pass
+
+
+class WrongHeuristic(ValueError):
     pass
 
 
@@ -29,7 +35,6 @@ def main():
         for line in file:  # read rest of lines
             board.append([int(x) for x in line.split()])
 
-    print(board)
     validate_board(board)
     strategies.target_state(w, k)
 
@@ -43,8 +48,14 @@ def main():
         start_time = time.process_time()
         output = strategies.dfs(start_time, board, list(input_args.additional_param))
     elif input_args.acronym == "astr":
+        if input_args.additional_param == "hamm":
+            heuristic = ac.Hamming()
+        elif input_args.additional_param == "manh":
+            heuristic = ac.Manhattan()
+        else:
+            raise WrongHeuristic("Given heuristic is wrong")
         start_time = time.process_time()
-        output = strategies.astr(start_time, board, list(input_args.additional_param))
+        output = strategies.astr(start_time, board, heuristic)
 
     #Save result
     with open(input_args.save_file_name, "w+") as file:

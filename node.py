@@ -24,7 +24,7 @@ class State:
 
 
 class Node:
-    def __init__(self, current_state, parent_node, last_move, sequence, depth):
+    def __init__(self, current_state, parent_node, last_move, sequence=None, depth=0):
         self.state = current_state
         self.last_move = last_move
 
