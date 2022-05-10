@@ -96,28 +96,6 @@ def dfs(start_time: float, board: node.State, additional_param: []):
     return False
 
 
-class Hamming:
-    def __call__(self, neighbour):
-        hamming_distance = 0
-        for y in range(len(TARGET_BOARD)):
-            for x in range(len(TARGET_BOARD[y])):
-                if neighbour.state[y][x] != TARGET_BOARD[y][x] and neighbour.state[y][x] != 0:
-                    hamming_distance += 1
-        return hamming_distance
-
-
-class Manhattan:
-    def __call__(self, neighbour):
-        manhattan_distance = 0
-        for y in range(len(TARGET_BOARD)):
-            for x in range(len(TARGET_BOARD[y])):
-                if neighbour.state[y][x] != TARGET_BOARD[y][x] and neighbour.state[y][x] != 0:
-                    x_pos = (neighbour.state[y][x] - 1) % len(TARGET_BOARD)
-                    y_pos = floor((neighbour.state[y][x] - 1) / len(TARGET_BOARD))
-                    manhattan_distance += abs(x - x_pos) + abs(y - y_pos)
-        return manhattan_distance
-
-
 class ElementDekorator:
     def __init__(self, element_id, node_object, distance):
         self.element_id = element_id
@@ -129,6 +107,26 @@ class ElementDekorator:
 
     def __lt__(self, other):
         return self.distance < other.distance and self.element_id < other.element_id
+
+
+def hamming(neighbour):
+    hamming_distance = 0
+    for y in range(len(TARGET_BOARD)):
+        for x in range(len(TARGET_BOARD[y])):
+            if neighbour.state[y][x] != TARGET_BOARD[y][x] and neighbour.state[y][x] != 0:
+                hamming_distance += 1
+    return hamming_distance
+
+
+def manhattan(neighbour):
+    manhattan_distance = 0
+    for y in range(len(TARGET_BOARD)):
+        for x in range(len(TARGET_BOARD[y])):
+            if neighbour.state[y][x] != TARGET_BOARD[y][x] and neighbour.state[y][x] != 0:
+                x_pos = (neighbour.state[y][x] - 1) % len(TARGET_BOARD)
+                y_pos = floor((neighbour.state[y][x] - 1) / len(TARGET_BOARD))
+                manhattan_distance += abs(x - x_pos) + abs(y - y_pos)
+    return manhattan_distance
 
 
 def astr(start_time: float, board: node.State, heuristic):

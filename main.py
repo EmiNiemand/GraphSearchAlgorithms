@@ -48,9 +48,9 @@ def main():
         output = strategies.dfs(start_time, board, list(input_args.additional_param))
     elif input_args.acronym == "astr":
         if input_args.additional_param == "hamm":
-            heuristic = strategies.Hamming()
+            heuristic = strategies.hamming
         elif input_args.additional_param == "manh":
-            heuristic = strategies.Manhattan()
+            heuristic = strategies.manhattan
         else:
             raise WrongHeuristic("Given heuristic is wrong")
         start_time = time.process_time()
