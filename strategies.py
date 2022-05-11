@@ -71,15 +71,13 @@ def dfs(start_time: float, board: node.State, additional_param: []):
         processed_states += 1
         max_depth = max(max_depth, v.depth)
 
-        if v.state not in closed_states and v.depth < MAX_DEPTH:
+        if v not in closed_states and v.depth < MAX_DEPTH:
             closed_states.add(v)
 
-            neighbours = reversed(v.get_neighbours())
-
-            for neighbour in neighbours:
-                if goal_reached(neighbour.state):
+            for neighbour in reversed(v.get_neighbours()):
+                if goal_reached(v.state):
                     return io.Output(
-                        neighbour.get_solution(),
+                        v.get_solution(),
                         visited_states,
                         processed_states,
                         max_depth,
@@ -91,16 +89,22 @@ def dfs(start_time: float, board: node.State, additional_param: []):
 
 
 class ElementDekorator:
-    def __init__(self, element_id, node_object, distance):
+    def __init__(self, distance, element_id, node_object):
+        self.distance = distance
         self.element_id = element_id
         self.node_object = node_object
-        self.distance = distance
-
-    def __le__(self, other):
-        return self.distance <= other.distance and self.element_id <= other.element_id
 
     def __lt__(self, other):
-        return self.distance < other.distance and self.element_id < other.element_id
+        if self.distance == other.distance:
+            return self.element_id < other.element_id
+        else:
+            return self.distance < other.distance
+
+    def __le__(self, other):
+        if self.distance == other.distance:
+            return self.element_id < other.element_id
+        else:
+            return self.distance < other.distance
 
 
 def hamming(neighbour):
@@ -130,7 +134,7 @@ def astr(start_time: float, board: node.State, heuristic):
     open_states = PriorityQueue()
     closed_states = set()
     max_depth = 0
-    open_states.put(ElementDekorator(processed_states, current_node, heuristic(current_node)))
+    open_states.put(ElementDekorator(heuristic(current_node), processed_states, current_node))
 
     while open_states:
         v = open_states.get().node_object
@@ -151,10 +155,11 @@ def astr(start_time: float, board: node.State, heuristic):
             )
 
         closed_states.add(v)
+
         for neighbour in v.get_neighbours():
             if neighbour not in closed_states:
                 distance = neighbour.depth + heuristic(neighbour)
-                open_states.put(ElementDekorator(processed_states, neighbour, distance))
+                open_states.put(ElementDekorator(distance, processed_states, neighbour))
                 visited_states += 1
     return False
 

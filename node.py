@@ -48,14 +48,14 @@ class Node:
         x, y = self.zero
         initial_sequence = self.sequence.copy()
 
-        if self.zero[1] == 0:
-            self.sequence.remove('U')
-        elif self.zero[1] == len(self.state) - 1:
-            self.sequence.remove('D')
         if self.zero[0] == 0:
             self.sequence.remove('L')
         elif self.zero[0] == len(self.state) - 1:
             self.sequence.remove('R')
+        if self.zero[1] == 0:
+            self.sequence.remove('U')
+        elif self.zero[1] == len(self.state) - 1:
+            self.sequence.remove('D')
 
         for i in range(len(self.sequence)):
             neighbours.append([row[:] for row in self.state])
