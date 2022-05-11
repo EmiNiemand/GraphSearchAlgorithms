@@ -35,13 +35,20 @@ class Node:
 
         self.parent = parent_node
         self.depth = depth
-        self.zero = self.zero_position()
+        self.zero = self.get_zero_position()
 
     def __eq__(self, other):
         return self.state == other.state and self.last_move == other.last_move and self.depth == other.depth
 
     def __hash__(self):
         return hash(self.state) + hash(self.last_move) + hash(self.depth)
+
+    def get_zero_position(self):
+        for y in range(len(self.state)):
+            for x in range(len(self.state[y])):
+                if self.state[y][x] == 0:
+                    return tuple((x, y))
+        raise NoZeroFoundException("There's no zero in the board")
 
     def get_neighbours(self):
         neighbours = []
@@ -95,11 +102,4 @@ class Node:
             parent = parent.parent
         solution.reverse()
         return solution
-
-    def zero_position(self):
-        for y in range(len(self.state)):
-            for x in range(len(self.state[y])):
-                if self.state[y][x] == 0:
-                    return tuple((x, y))
-        raise NoZeroFoundException("There's no zero in the board")
 
