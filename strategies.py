@@ -59,7 +59,7 @@ def bfs(start_time: float, board: node.State, additional_param: []):
         -1,
         visited_states,
         processed_states,
-        max_depth,
+        MAX_DEPTH,
         time.process_time() - start_time
     )
 
@@ -103,7 +103,7 @@ def dfs(start_time: float, board: node.State, additional_param: []):
         -1,
         visited_states,
         processed_states,
-        max_depth,
+        MAX_DEPTH,
         time.process_time() - start_time
     )
 
@@ -185,7 +185,7 @@ def astr(start_time: float, board: node.State, heuristic):
         -1,
         visited_states,
         processed_states,
-        max_depth,
+        MAX_DEPTH,
         time.process_time() - start_time
     )
 
