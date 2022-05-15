@@ -55,7 +55,13 @@ def bfs(start_time: float, board: node.State, additional_param: []):
                 if neighbour not in closed_states:
                     open_states.append(neighbour)
                     visited_states += 1
-    return False
+    return io.Output(
+        -1,
+        visited_states,
+        processed_states,
+        max_depth,
+        time.process_time() - start_time
+    )
 
 
 def dfs(start_time: float, board: node.State, additional_param: []):
@@ -78,15 +84,14 @@ def dfs(start_time: float, board: node.State, additional_param: []):
     while open_states:
         v = open_states.pop()
         processed_states += 1
-        max_depth = max(max_depth, v.depth)
 
-        if v not in closed_states and v.depth < MAX_DEPTH:
-            closed_states.add(v)
+        if v.state not in closed_states and v.depth < MAX_DEPTH:
+            closed_states.add(v.state)
 
             for neighbour in reversed(v.get_neighbours()):
-                if goal_reached(v.state):
+                if goal_reached(neighbour.state):
                     return io.Output(
-                        v.get_solution(),
+                        neighbour.get_solution(),
                         visited_states,
                         processed_states,
                         max_depth,
@@ -94,7 +99,13 @@ def dfs(start_time: float, board: node.State, additional_param: []):
                     )
                 open_states.append(neighbour)
                 visited_states += 1
-    return False
+    return io.Output(
+        -1,
+        visited_states,
+        processed_states,
+        max_depth,
+        time.process_time() - start_time
+    )
 
 
 class ElementDekorator:
@@ -170,5 +181,11 @@ def astr(start_time: float, board: node.State, heuristic):
                 distance = neighbour.depth + heuristic(neighbour)
                 open_states.put(ElementDekorator(distance, processed_states, neighbour))
                 visited_states += 1
-    return False
+    return io.Output(
+        -1,
+        visited_states,
+        processed_states,
+        max_depth,
+        time.process_time() - start_time
+    )
 

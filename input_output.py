@@ -41,11 +41,18 @@ class Output:
                 f"{self.solution}"
 
     def get_result_additional_info(self):
-        return f"{len(self.solution)}\n" \
-                f"{self.visited_states}\n" \
-                f"{self.processed_states}\n" \
-                f"{self.recursion_max_depth}\n"\
-                f"{round(self.process_time * 1000, 3)}"
+        if self.solution != -1:
+            return f"{len(self.solution)}\n" \
+                    f"{self.visited_states}\n" \
+                    f"{self.processed_states}\n" \
+                    f"{self.recursion_max_depth}\n"\
+                    f"{round(self.process_time * 1000, 3)}"
+        else:
+            return f"{self.solution}\n" \
+                   f"{self.visited_states}\n" \
+                   f"{self.processed_states}\n" \
+                   f"{self.recursion_max_depth}\n" \
+                   f"{round(self.process_time * 1000, 3)}"
 
 
 def get_input():

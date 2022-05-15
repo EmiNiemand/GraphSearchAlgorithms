@@ -24,7 +24,7 @@ def validate_board(board):
 def main():
     input_args = io.get_input()
     input_args.validate()
-    #read
+    # read
     with open(input_args.source_file_name, "r") as file:
         if not file.readable():
             raise Exception("Cannot open the file: " + file.name)
@@ -56,21 +56,17 @@ def main():
         start_time = time.process_time()
         output = strategies.astr(start_time, board, heuristic)
 
-    #Save result
+    # Save result
     with open(input_args.save_file_name, "w+") as file:
-        if output is False:
+        if output.solution == -1:
             file.write("-1")
         else:
             file.write(output.get_result())
 
-    #Save result additional information
+    # Save result additional information
     with open(input_args.additional_file_name, "w+") as file:
-        if output is False:
-            file.write("-1")
-        else:
             file.write(output.get_result_additional_info())
 
 
 if __name__ == '__main__':
     main()
-
