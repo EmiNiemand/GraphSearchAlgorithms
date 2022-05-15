@@ -66,6 +66,15 @@ def dfs(start_time: float, board: node.State, additional_param: []):
     closed_states = set()
     max_depth = 0
 
+    if goal_reached(current_node.state):
+        return io.Output(
+            current_node.get_solution(),
+            visited_states,
+            processed_states,
+            max_depth,
+            time.process_time() - start_time
+        )
+
     while open_states:
         v = open_states.pop()
         processed_states += 1
