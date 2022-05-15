@@ -84,9 +84,9 @@ def dfs(start_time: float, board: node.State, additional_param: []):
             closed_states.add(v)
 
             for neighbour in reversed(v.get_neighbours()):
-                if goal_reached(v.state):
+                if goal_reached(neighbour.state):
                     return io.Output(
-                        v.get_solution(),
+                        neighbour.get_solution(),
                         visited_states,
                         processed_states,
                         max_depth,
